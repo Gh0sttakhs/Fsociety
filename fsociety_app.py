@@ -172,4 +172,78 @@ def trace_ip(ip):
             print(f"    {WHITE}City:{RESET}    {data.get('city')}")
             print(f"    {WHITE}ISP:{RESET}     {data.get('isp')}")
             print(f"{GREEN}[+] Trace Complete.{RESET}")     
-    except: print(f"{RED}[!] Connection Error.{RESET
+    except: print(f"{RED}[!] Connection Error.{RESET}")
+
+def shorten_url(url):
+    print(f"{GRAY}Masking URL stream...{RESET}")
+    time.sleep(1)
+    if not url.startswith("http"): url = "http://" + url
+    api_url = "http://tinyurl.com/api-create.php?url=" + urllib.parse.quote(url)
+    try:
+        response = urllib.request.urlopen(api_url)
+        short_link = response.read().decode('utf-8')
+        print(f"{GREEN}[+] URL MASKED:{RESET} {CYAN}{short_link}{RESET}")
+    except: print(f"{RED}[!] Error: Could not mask URL.{RESET}")
+
+def print_menu():
+    print(f"\n{WHITE}COMMAND LIST:{RESET}")
+    # Η νέα σειρά: Trap -> Mask -> Trace -> Scan
+    print(f"{RED}trap        {RESET} : Start Trap Server")
+    print(f"{RED}mask [url]  {RESET} : Hide URL (TinyURL)")
+    print(f"{RED}trace [ip]  {RESET} : Geolocate IP Address")
+    print(f"{RED}scan [ip]   {RESET} : Port Scanner")
+    print(f"{RED}encrypt     {RESET} : Encrypt message")
+    print(f"{RED}decrypt     {RESET} : Decrypt message")
+    print(f"{RED}check       {RESET} : Password check")
+    print(f"{RED}quote       {RESET} : Wisdom")
+    print(f"{RED}clear       {RESET} : Clear screen")
+    print(f"{RED}exit        {RESET} : Logout\n")
+
+def main():
+    boot_animation()
+    login()
+    while True:
+        try: cmd_input = input(f"{RED}root@fsociety:~${RESET} ").strip()
+        except KeyboardInterrupt:
+            print(); continue
+        except: break
+        if not cmd_input: continue
+        parts = cmd_input.split()
+        command = parts[0].lower()
+        args = " ".join(parts[1:])
+
+        if command == "scan":
+            if not args: print(f"{GRAY}Usage: scan <ip or domain>{RESET}")
+            else: port_scan(args)
+        elif command == "trap": start_honeytrap()
+        elif command == "encrypt":
+            if not args: print(f"{GRAY}Usage: encrypt <text>{RESET}")
+            else: print(f"{CYAN}[+] OUTPUT:{RESET} {base64.b64encode(args.encode()).decode()}")
+        elif command == "decrypt":
+            if not args: print(f"{GRAY}Usage: decrypt <code>{RESET}")
+            else:
+                try: print(f"{CYAN}[+] MESSAGE:{RESET} {base64.b64decode(args.encode()).decode()}")
+                except: print(f"{RED}[!] Error: Invalid Code.{RESET}")
+        elif command == "trace":
+            if not args: print(f"{GRAY}Usage: trace <ip>{RESET}")
+            else: trace_ip(args)
+        elif command == "mask":
+            if not args: print(f"{GRAY}Usage: mask <url>{RESET}")
+            else: shorten_url(args)
+        elif command == "check":
+            if not args: print(f"{GRAY}Usage: check <password>{RESET}")
+            elif len(args) < 8: print(f"{RED}[-] WEAK PASSWORD{RESET}")
+            else: print(f"{GREEN}[+] STRONG PASSWORD{RESET}")
+        elif command == "quote":
+            quotes = ["Control is an illusion.", "Hello friend.", "We are fsociety.", "Money is not real.", "Annihilation is always the answer."]
+            type_effect(f"{WHITE}> {random.choice(quotes)}{RESET}")
+        elif command == "exit":
+            type_effect(f"{RED}Goodbye, friend.{RESET}", speed=0.1)
+            time.sleep(0.5); break
+        elif command == "help": print_menu()
+        elif command == "clear":
+            clear_screen(); print(RED + BANNER_TEXT + RESET); print() 
+        else: print(f"{GRAY}Unknown command.{RESET}")
+
+if __name__ == "__main__":
+    main()
