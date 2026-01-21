@@ -7,6 +7,10 @@
                                |___/
 
 ```
+![Python](https://img.shields.io/badge/Language-Python3-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Windows%20%7C%20MacOS-black?style=for-the-badge)
+![Security](https://img.shields.io/badge/Security-Root%20Required-red?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Operational-brightgreen?style=for-the-badge)
 
 > **"Control is an illusion."**
 > 
